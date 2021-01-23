@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.langsun.dao.company.CompanyDao">
+    <resultMap id="BaseResultMap" type="com.langsun.domain.company.Company">
+        <id column="id" property="id"/>
+        <!--其他字段-->
+        <result column="name" property="name"/>
+        <result column="expiration_date" property="expirationDate"/>
+        <result column="address" property="address"/>
+        <result column="license_id" property="licenseId"/>
+        <result column="representative" property="representative"/>
+        <result column="phone" property="phone"/>
+        <result column="company_size" property="companySize"/>
+        <result column="industry" property="industry"/>
+        <result column="remarks" property="remarks"/>
+        <result column="state" property="state"/>
+        <result column="balance" property="balance"/>
+        <result column="city" property="city"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        select * from ss_company
+    </select>
+
+
+<!--  保存企业数据  -->
+
+    <insert id="save" parameterType="com.langsun.domain.company.Company">
+
+        insert into ss_company
+        (id,name,expiration_date,address,license_id,representative,phone,company_size,industry,remarks,state,balance,city)
+        values (
+        #{id},#{name},#{expirationDate},#{address},#{licenseId},#{representative},#{phone},#{companySize},#{industry},#{remarks},#{state},#{balance},#{city}
+        );
+
+    </insert>
+
+<!--  跳转update页面数据回显  -->
+
+    <select id="findById" parameterType="string" resultType="com.langsun.domain.company.Company">
+
+        select * from ss_company where id = #{id};
+
+    </select>
+
+<!--  修改数据  -->
+    <update id="edit" parameterType="com.langsun.domain.company.Company">
+        update ss_company set
+            name = #{name},
+            expiration_date = #{expirationDate},
+            address = #{address},
+            license_id = #{licenseId},
+            representative = #{representative},
+            phone = #{phone},
+            company_size = #{companySize},
+            industry = #{industry},
+            remarks = #{remarks},
+            state = #{state},
+            balance = #{balance},
+            city = #{city}
+            where id = #{id};
+    </update>
+
+<!--  根据id删除选中数据  -->
+    <delete id="deleteById" parameterType="string">
+
+        delete from ss_company where id = #{id};
+
+    </delete>
+
+<!--  总数据条数  -->
+    <select id="findTotal" resultType="long">
+
+        select count(*) from ss_company;
+
+    </select>
+
+<!--  公司分页数据  -->
+    <select id="findRows" resultMap="BaseResultMap">
+
+        select * from ss_company limit #{0},#{1};
+
+    </select>
+
+
+</mapper>

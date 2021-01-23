@@ -1,0 +1,7 @@
+/*.log
+.rebel.xml.bak
+.rebel-remote.xml.bak
+target
+/export_system_service/axis.log
+/*.properties
+*.properties

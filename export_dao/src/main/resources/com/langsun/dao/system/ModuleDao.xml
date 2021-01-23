@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.langsun.dao.system.ModuleDao">
+    <resultMap id="BaseResultMap" type="com.langsun.domain.system.Module">
+        <id column="module_id" property="id"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="parent_name" property="parentName"/>
+        <result column="name" property="name"/>
+        <result column="name_en" property="nameEn"/>
+        <result column="layer_num" property="layerNum"/>
+        <result column="is_leaf" property="isLeaf"/>
+        <result column="ico" property="ico"/>
+        <result column="cpermission" property="cpermission"/>
+        <result column="curl" property="curl"/>
+        <result column="ctype" property="ctype"/>
+        <result column="state" property="state"/>
+        <result column="belong" property="belong"/>
+        <result column="cwhich" property="cwhich"/>
+        <result column="quote_num" property="quoteNum"/>
+        <result column="remark" property="remark"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="company_id" property="companyId"/>
+
+    </resultMap>
+
+    <!--查询全部模块列表-->
+    <select id="findAll" resultMap="BaseResultMap">
+        select * from ss_module
+    </select>
+
+    <!--查询除SAAS外全部模块列表-->
+    <select id="findAllExcptSaas" resultMap="BaseResultMap">
+        select * from ss_module where belong = 1 and company_id = #{companyId}
+    </select>
+
+
+    <!--根据id查询-->
+    <select id="findById" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * from ss_module where module_id = #{id}
+    </select>
+
+    <!--删除-->
+    <delete id="delete" parameterType="java.lang.String">
+        delete from ss_module where module_id = #{id}
+    </delete>
+
+    <!--保存-->
+    <insert id="save" parameterType="com.langsun.domain.system.Module">
+        insert into ss_module (module_id, parent_id, parent_name, name, layer_num, is_leaf,
+        ico, cpermission, curl, ctype, state, belong, cwhich, quote_num,
+        remark, order_no,name_en,company_id)
+        values (#{id}, #{parentId}, #{parentName}, #{name}, #{layerNum}, #{isLeaf},
+        #{ico}, #{cpermission}, #{curl}, #{ctype}, #{state}, #{belong}, #{cwhich}, #{quoteNum},
+        #{remark}, #{orderNo},#{name},#{companyId})
+    </insert>
+
+    <!--更新-->
+    <update id="update" parameterType="com.langsun.domain.system.Module">
+        update ss_module
+        set parent_id = #{parentId},
+        parent_name = #{parentName},
+        name = #{name},
+        name_en = #{name},
+        layer_num = #{layerNum},
+        is_leaf = #{isLeaf},
+        ico = #{ico},
+        cpermission = #{cpermission},
+        curl = #{curl},
+        ctype = #{ctype},
+        state = #{state},
+        belong = #{belong},
+        cwhich = #{cwhich},
+        quote_num = #{quoteNum},
+        remark = #{remark},
+        order_no = #{orderNo},
+        company_id = #{companyId},
+        where module_id = #{id}
+    </update>
+
+
+    <!--
+        //根据角色id 查询模块的方法
+    List<Module> findByRoleId(String roleid);
+    -->
+    <select id="findByRoleId" resultMap="BaseResultMap">
+        SELECT * FROM pe_role_module rm , ss_module sm
+            WHERE rm.`module_id` = sm.`module_id`
+            AND rm.role_id =#{id} ;
+    </select>
+
+    <!--
+      //根据角色id 删除中间表数据
+    void deleteRoleModule(String roleid);
+    -->
+    <delete id="deleteRoleModule">
+        delete from pe_role_module where role_id = #{roleid}
+    </delete>
+    <!--
+     //添加中间表数据
+    void saveRoleModule(String roleid, String moduleId);
+    -->
+    <insert id="saveRoleModule">
+      insert into pe_role_module values(#{roleid} , #{moduleId})
+    </insert>
+
+    <!--  根据user中的degree判断module中belong判断角色权限module  -->
+    <select id="findByBelong" resultMap="BaseResultMap">
+        SELECT * FROM ss_module WHERE belong = #{belong}
+    </select>
+
+    <select id="findByUserBelong" resultMap="BaseResultMap">
+        SELECT * FROM ss_module WHERE belong = #{belong} and company_id = #{companyId}
+    </select>
+    <!--  根据user_id和两个中间表寻找decent角色权限module  -->
+    <select id="findByUserId" resultMap="BaseResultMap">
+        SELECT * FROM ss_module WHERE module_id IN
+        (SELECT DISTINCT module_id FROM pe_role_user ru, pe_role_module rm
+        WHERE ru.`role_id`=rm.`role_id` AND ru.`user_id`=#{userid})
+    </select>
+</mapper>

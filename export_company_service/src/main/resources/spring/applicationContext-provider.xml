@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd        http://dubbo.apache.org/schema/dubbo        http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
+
+    <!-- 提供方应用信息，用于计算依赖关系 -->
+    <dubbo:application name="export_company_service"  />
+
+    <!-- 使用zookeeper广播注册中心暴露服务地址 -->
+    <dubbo:registry address="zookeeper://127.0.0.1:2181" />
+
+    <!-- 用dubbo协议在20880端口暴露服务 端口号是与注册中心之间的一个交互,只有一个应用的时候可以省略.
+            但是如果有多个提供者provider的时候,端口号不能一致-->
+    <dubbo:protocol name="dubbo" port="20880" />
+
+<!--  这种方法,一个接口需要两个配置,所以用下面的annotation package  -->
+<!--    &lt;!&ndash; 声明需要暴露的服务接口 &ndash;&gt;-->
+<!--    <dubbo:service interface="com.langsun.service.UserService" ref="demoService" />-->
+
+<!--    &lt;!&ndash; 和本地bean一样实现服务 &ndash;&gt;-->
+<!--    <bean id="demoService" class="com.langsun.service.impl.UserServiceImpl" />-->
+
+    <dubbo:annotation package="com.langsun.service"></dubbo:annotation>
+</beans>

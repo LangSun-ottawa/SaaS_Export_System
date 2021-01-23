@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
+
+	<import resource="applicationContext-shiro.xml"></import>
+	<!--引入七牛云的配置文件-->
+	<context:property-placeholder location="classpath:qiniu.properties"></context:property-placeholder>
+
+	<!--扫描注解-->
+	<context:component-scan base-package="com.langsun.web"></context:component-scan>
+
+	<!--配置视图解析器
+		return "forward:/WEB-INF/pages/   company/company-list    .jsp";
+	-->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!--前缀-->
+		<property name="prefix" value="/WEB-INF/pages/"></property>
+		<!--后缀-->
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+
+	<!--配置异常解析器的类-->
+	<bean class="com.langsun.web.controller.exception.MyException"></bean>
+
+	<!--配置转换器 最终要交给注解驱动使用-->
+	<bean id="conversionService"  class="org.springframework.context.support.ConversionServiceFactoryBean">
+		<property name="converters">
+			<list>
+				<!--配置自定义的日期转换器-->
+				<bean class="com.langsun.web.controller.converter.MyStringToDateConverter"></bean>
+			</list>
+		</property>
+	</bean>
+
+	<!-- id 的值是固定的 配置文件上传解析器 为上传文件-->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 设置上传文件的最大尺寸为 5MB -->
+		<property name="maxUploadSize">
+			<value>5242880</value>
+		</property>
+	</bean>
+
+	<!--配置注解驱动-->
+	<mvc:annotation-driven conversion-service="conversionService"></mvc:annotation-driven>
+
+	<!--直接注解aop-->
+	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+
+
+	<!--dubbo consumer配置 -->
+	<!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
+	<dubbo:application name="export_manager_web">
+		<dubbo:parameter key="qos.enable" value="false"></dubbo:parameter>
+	</dubbo:application>
+
+
+	<!-- 使用multicast广播注册中心暴露发现服务地址 -->
+	<dubbo:registry address="zookeeper://127.0.0.1:2181" />
+
+	<!--包扫描-->
+	<dubbo:annotation package="com.langsun.web"></dubbo:annotation>
+</beans>

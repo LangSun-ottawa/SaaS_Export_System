@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.langsun.dao.stat.StatDao">
+
+
+
+    <select id="findFactory" resultType="java.util.Map" parameterType="String">
+        SELECT factory_name as name , SUM(amount) as value FROM `co_contract_product`
+        WHERE company_id = #{id}
+        GROUP BY factory_name ORDER BY SUM(amount) DESC LIMIT 10 ;
+    </select>
+
+    <select id="findSell" resultType="java.util.Map" parameterType="String">
+        SELECT product_no AS `name` ,SUM(amount) AS `value` FROM `co_contract_product`
+        WHERE company_id = #{id}
+        GROUP BY product_no ORDER BY `value` DESC LIMIT 10 ;
+    </select>
+
+    <select id="findOnline" resultType="java.util.Map" parameterType="String">
+        SELECT info.`A1` AS `name`,IFNULL(time.value,0) AS 'value' FROM `st_online_info` `info`
+        LEFT JOIN (SELECT DATE_FORMAT(TIME,'%H') ti,COUNT(*) VALUE
+        FROM `st_sys_log` WHERE company_id = #{id} GROUP BY ti) `time` ON time.ti =info.`A1` ;
+    </select>
+</mapper>
