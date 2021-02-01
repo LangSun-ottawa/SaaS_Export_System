@@ -22,7 +22,7 @@
 
 #### Using  **Shiro**  and  **RBAC**  to restrict network access and used MD5 encryption to secure users’ passwords in the database and use Redis to cache user info and menu list. 
 
-![image-20210131233049499](https://raw.githubusercontent.com/LangSun-ottawa/Picgo/main/img/image-20210131233049499.png)
+![ezgif.com-gif-maker3333](https://raw.githubusercontent.com/LangSun-ottawa/Picgo/main/img/ezgif.com-gif-maker3333.gif)
 
 ## (2)customized modules
 
