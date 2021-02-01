@@ -67,3 +67,5 @@
 ## (6)Basic Information
 
 ![image-20210131234940508](https://raw.githubusercontent.com/LangSun-ottawa/Picgo/main/img/image-20210131234940508.png)
+
+## TODO----Solve the problem caused by forced conversion of "http img url" to "https url" and "https websocket" problem.
