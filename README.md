@@ -10,11 +10,13 @@
 
 ### User company 
 
-### :email: lw@export.com   password: 123456
+### email: lw@export.com   
+    password: 123456
 
 ### Admin:  
 
-### :email:: zhangsan@export.com:   password:123456
+### email:: zhangsan@export.com
+    password:123456
 
 ## 3.Features
 
