@@ -8,14 +8,14 @@
 
 ## 2. login    
 
-### User company 
+### User company acount: 
 
 ### email: lw@export.com   
     password: 123456
 
-### Admin:  
+### Admin account:  
 
-### email:: zhangsan@export.com
+### email: zhangsan@export.com
     password:123456
 
 ## 3.Features
