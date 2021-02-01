@@ -2,7 +2,7 @@
 
 ## 1.Deployment
 
-### implemented by ngrok   
+### Deployed by ngrok   
 
 ### Address: https://b9e9c5f2f213.ngrok.io/
 
